@@ -1,0 +1,53 @@
+/* 初始加载动画 */
+._dash-loading {
+    color: transparent;
+    position: fixed;
+    width: calc(512px / 8);
+    height: calc(512px / 8);
+    top: 40vh;
+    left: 50vw;
+    background-image: url('/assets/imgs/logo.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    animation: spin-animation 1.5s infinite;
+}
+
+._dash-loading::after {
+    content: '';
+}
+
+@keyframes spin-animation {
+
+    0%,
+    80% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+.event-collapse {
+    border: 0px;
+    border-radius: 0px;
+    background: transparent !important;
+}
+
+.event-collapse .ant-collapse-header {
+    border-radius: 0px;
+    padding: 15px 0 10px 0 !important;
+}
+
+.event-collapse .ant-collapse-content {
+    background-color: rgba(128, 128, 128, 0.1) !important;
+    border-radius: 1em !important;
+}
+
+.event-collapse .ant-collapse-content .ant-collapse-content-box {
+    padding: 10px 10px;
+}
+
+.event-collapse-header {
+    overflow: hidden
+}

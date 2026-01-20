@@ -1,0 +1,34 @@
+[project]
+name = "agsh"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "a2wsgi>=1.10.10",
+    "agno>=2.4.0",
+    "arxiv>=2.4.0",
+    "dash[compress]>=3.3.0",
+    "ddgs>=9.10.0",
+    "fastapi>=0.128.0",
+    "feffery-antd-charts>=0.2.3",
+    "feffery-antd-components>=0.4.3",
+    "feffery-dash-utils>=0.2.6",
+    "feffery-markdown-components>=0.4.3",
+    "feffery-utils-components>=0.3.5",
+    "loguru>=0.7.3",
+    "openai>=2.15.0",
+    "pathvalidate>=3.3.1",
+    "pyjwt>=2.10.1",
+    "pypdf>=6.6.0",
+    "sqlalchemy>=2.0.45",
+    "tiktoken>=0.12.0",
+    "tokenizers>=0.22.2",
+    "user-agents>=2.2.0",
+    "uvicorn[standard]>=0.40.0",
+    "yarl>=1.22.0",
+]
+
+[[tool.uv.index]]
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+default = true
