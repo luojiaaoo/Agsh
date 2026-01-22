@@ -24,7 +24,7 @@ model_deepseek_v32 = Siliconflow(
 
 agent_task_planner = Agent(
     name='任务分析与规划',
-    id='task_planner',
+    id='task-planner',
     model=model_deepseek_v32,
     add_datetime_to_context=True,
     tool_call_limit=2,
@@ -40,12 +40,12 @@ team_deep_research = Team(
     model=model_deepseek_v32,
     add_datetime_to_context=True,
     tool_call_limit=10,
-    id='deep_research',
+    id='deep-research',
     name='Deep Research',
     members=[
         Agent(
             name='收集Web内容',
-            id='web_content_gather',
+            id='web-content-gather',
             model=model_deepseek_v32,
             tool_call_limit=5,
             add_datetime_to_context=True,
@@ -61,7 +61,7 @@ team_deep_research = Team(
         ),
         Agent(
             name='收集Arxiv论文内容',
-            id='arxiv_paper_gather',
+            id='arxiv-paper-gather',
             model=model_deepseek_v32,
             tool_call_limit=2,
             add_datetime_to_context=True,
@@ -82,7 +82,7 @@ team_deep_research = Team(
 # 网页报告生成
 agent_html_report = Agent(
     name='html报告生成',
-    id='html_report',
+    id='html-report',
     model=model_deepseek_v32,
     role='html报告生成专家',
     instructions=prompt.html_report_prompt,
@@ -91,7 +91,7 @@ agent_html_report = Agent(
 # markdown报告生成
 agent_markdown_report = Agent(
     name='markdown报告生成',
-    id='markdown_report',
+    id='markdown-report',
     model=model_deepseek_v32,
     role='markdown报告生成专家',
     instructions=prompt.markdown_report_prompt,
@@ -100,7 +100,7 @@ agent_markdown_report = Agent(
 # ppt报告生成
 agent_ppt_report = Agent(
     name='ppt报告生成',
-    id='ppt_report',
+    id='ppt-report',
     model=model_deepseek_v32,
     role='ppt报告生成专家',
     instructions=prompt.ppt_report_prompt,
@@ -164,7 +164,7 @@ steps_ppt_report = Steps(
 )
 
 workflow = Workflow(
-    id='deep_research_pipeline',
+    id='deep-research-pipeline',
     name='深度研究流水线',
     db=SqliteDb(db_file='agno.db'),
     steps=[

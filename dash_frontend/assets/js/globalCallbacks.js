@@ -533,7 +533,7 @@ function append_assistant_event_reasoning(text, { replace = false, step_id = nul
     scroll_chat_area()
 }
 
-function append_assistant_event_tool(title, content, btn_show, icon, step_id = null) { // 追加工具按钮
+function append_assistant_event_tool(title, content, btn_show, step_id = null) { // 追加工具按钮
     let message_box_id = null;
     if (step_id === null) {
         message_box_id = window.server_run_id
@@ -542,14 +542,47 @@ function append_assistant_event_tool(title, content, btn_show, icon, step_id = n
     }
     let uuid = uuidHex()
     let children = dash_component_api.getLayout({ 'type': 'show-tool-result-div', 'index': message_box_id }).props.children;
-    let button = { 'props': { 'id': { 'type': 'show-tool-drawer', 'index': uuid }, 'children': btn_show, 'icon': { 'props': { 'icon': icon }, 'size': 'small', 'type': 'AntdIcon', 'namespace': 'feffery_antd_components' }, 'color': 'default', 'variant': 'filled' }, 'type': 'AntdButton', 'namespace': 'feffery_antd_components' }
-    let drawer = { 'props': { 'id': { 'type': 'tool-drawer', 'index': uuid }, 'children': content, 'title': title, 'placement': 'right', 'width': '500px' }, 'type': 'AntdDrawer', 'namespace': 'feffery_antd_components' }
+    let button = { 'props': { 'id': { 'type': 'show-tool-drawer', 'index': uuid }, 'children': btn_show, 'icon': { 'props': { 'icon': 'antd-repair' }, 'size': 'small', 'type': 'AntdIcon', 'namespace': 'feffery_antd_components' }, 'color': 'default', 'variant': 'filled' }, 'type': 'AntdButton', 'namespace': 'feffery_antd_components' }
+    let drawer = { 'props': { 'id': { 'type': 'tool-drawer', 'index': uuid }, 'children': {'props': {'children': content, 'style': {'display': 'inline-block', 'whiteSpace': 'pre-wrap', 'overflowWrap': 'break-word', 'hyphens': 'auto'}}, 'type': 'AntdText', 'namespace': 'feffery_antd_components'}, 'title': title, 'placement': 'right', 'width': '500px' }, 'type': 'AntdDrawer', 'namespace': 'feffery_antd_components' }
     dash_clientside.set_props(
         { 'type': 'show-tool-result-div', 'index': message_box_id },
         { children: [...children, button, drawer] },
     )
     scroll_chat_area()
 }
+
+function append_assistant_event_team_member(title, btn_show, think_id, output_id, step_id = null) { // 追加工具按钮
+    let message_box_id = null;
+    if (step_id === null) {
+        message_box_id = window.server_run_id
+    } else {
+        message_box_id = step_id
+    }
+    let uuid = uuidHex()
+    let children = dash_component_api.getLayout({ 'type': 'show-tool-result-div', 'index': message_box_id }).props.children;
+    let button = { 'props': { 'id': { 'type': 'show-tool-drawer', 'index': uuid }, 'children': btn_show, 'icon': { 'props': { 'icon': 'antd-team' }, 'size': 'small', 'type': 'AntdIcon', 'namespace': 'feffery_antd_components' }, 'color': 'default', 'variant': 'filled' }, 'type': 'AntdButton', 'namespace': 'feffery_antd_components' }
+    let drawer = { 'props': { 'id': { 'type': 'tool-drawer', 'index': uuid }, 'children': [{ 'props': { 'children': [{ 'props': { 'children': { 'props': { 'id': think_id, 'children': null, 'style': { 'background': 'transparent', 'font': 12 }, 'markdownStr': '', 'codeTheme': 'dracula', 'codeBlockStyle': { 'overflowX': 'auto' } }, 'type': 'FefferyMarkdown', 'namespace': 'feffery_markdown_components' }, 'className': 'event-collapse', 'classNames': { 'header': 'event-collapse-header' }, 'title': 'Thinking', 'isOpen': false, 'collapsible': 'header' }, 'type': 'AntdCollapse', 'namespace': 'feffery_antd_components' }, { 'props': { 'id': output_id, 'children': null, 'style': { 'background': 'transparent', 'font': 12, 'marginLeft': '15px' }, 'markdownStr': '', 'codeTheme': 'dracula', 'codeBlockStyle': { 'overflowX': 'auto' } }, 'type': 'FefferyMarkdown', 'namespace': 'feffery_markdown_components' }], 'vertical': true, 'gap': 5 }, 'type': 'AntdFlex', 'namespace': 'feffery_antd_components' }], 'title': title, 'placement': 'right', 'width': '500px' }, 'type': 'AntdDrawer', 'namespace': 'feffery_antd_components' }
+    dash_clientside.set_props(
+        { 'type': 'show-tool-result-div', 'index': message_box_id },
+        { children: [...children, button, drawer] },
+    )
+    scroll_chat_area()
+}
+
+function append_team_member(text, id_, replace = false) {
+    if (text === '') {
+        return
+    }
+    let markdownStr = null
+    if (replace) {
+        markdownStr = dash_component_api.getLayout(id_).props.markdownStr;
+    } else {
+        markdownStr = dash_component_api.getLayout(id_).props.markdownStr + text;
+    }
+    dash_clientside.set_props(id_, { markdownStr: markdownStr })
+}
+
+
 
 window.statistic_token = {}
 
@@ -646,7 +679,7 @@ function handle_agent(data, step_id = null) {
         let tool_args = data.tool.tool_args
         let title = `工具${tool_name}(${JSON.stringify(tool_args)})`
         set_event_collapse_title_text(`调用[${tool_name}]成功...`, step_id)
-        append_assistant_event_tool(title, data.tool.result, tool_name, 'antd-repair', step_id)
+        append_assistant_event_tool(title, data.tool.result, tool_name, step_id)
         return window.dash_clientside.no_update
     } else if (event_type === 'RunCompleted') {
         set_event_collapse_title_text('完成', step_id)
@@ -667,6 +700,7 @@ function handle_agent(data, step_id = null) {
     return window.dash_clientside.no_update
 }
 
+window.team_member_tool_info = {}
 function handle_team(data, step_id = null) {
     let event_type = data.event
     if (event_type === 'TeamRunStarted') {
@@ -687,25 +721,42 @@ function handle_team(data, step_id = null) {
             append_assistant_output(data.content, { step_id: step_id })
         }
         return window.dash_clientside.no_update
-    } else if (event_type === 'TeamToolCallStarted') {
-        let team_name = data.team_name
-        let member_id = data.tool.tool_args.member_id
-        let task = data.tool.tool_args.task
-        set_event_collapse_title_text(`[${team_name}]团队派发任务给[${member_id}]：${task}`, step_id)
-        return window.dash_clientside.no_update
-    } else if (event_type === 'TeamToolCallStarted') {
-        let team_name = data.team_name
-        let member_id = data.tool.tool_args.member_id
-        let task = data.tool.tool_args.task
-        set_event_collapse_title_text(`[${team_name}]团队派发任务给[${member_id}]：${task}`, step_id)
-        return window.dash_clientside.no_update
-    } else if (event_type === 'TeamToolCallCompleted') { // 收成员作业，并总结
+    } else if (event_type === 'TeamToolCallStarted') { // 成员任务开始，给成员作业保存参数
         let team_name = data.team_name
         let member_id = data.tool.tool_args.member_id
         let task = data.tool.tool_args.task
         let title = `${team_name}团队派发任务给[${member_id}]：${task}`
+        set_event_collapse_title_text(title, step_id)
+        window.team_member_tool_info[member_id] = title
+        return window.dash_clientside.no_update
+    } else if (event_type === 'RunStarted') { // 成员作业开始
+        let member_id = data.agent_id
+        let title = window.team_member_tool_info[member_id]
+        let run_id = data.run_id
+        append_assistant_event_team_member(title, member_id, `${run_id}_think`, `${run_id}_output`, step_id)
+        return window.dash_clientside.no_update
+    } else if (event_type === 'RunContent') { // 成员作业开始
+        let run_id = data.run_id
+        if (data.hasOwnProperty('reasoning_content')) { // 思考
+            append_team_member(data.reasoning_content, `${run_id}_think`)
+        }
+        if (data.hasOwnProperty('content')) { // 输出
+            append_team_member(data.content, `${run_id}_output`)
+        }
+        return window.dash_clientside.no_update
+    } if (event_type === 'RunCompleted') {
+        let run_id = data.run_id
+        if (data.hasOwnProperty('reasoning_content')) { // 思考
+            append_team_member(data.reasoning_content, `${run_id}_think`, true)
+        }
+        if (data.hasOwnProperty('content')) { // 输出
+            append_team_member(data.content, `${run_id}_output`, true)
+        }
+    } else if (event_type === 'TeamToolCallCompleted') { // 收成员作业，并总结
+        let team_name = data.team_name
+        let member_id = data.tool.tool_args.member_id
+        let task = data.tool.tool_args.task
         set_event_collapse_title_text(`[${team_name}]团队[${member_id}]：${task}完成...`, step_id)
-        append_assistant_event_tool(title, data.tool.result, member_id, 'antd-team', step_id)
         return window.dash_clientside.no_update
     } else if (event_type === 'TeamRunCompleted') {
         let team_name = data.team_name
@@ -733,9 +784,10 @@ function handle_team(data, step_id = null) {
         let agent_name = data.agent_name
         let tool_name = data.tool.tool_name
         let tool_args = data.tool.tool_args
+        let member_id = data.agent_id
         let title = `工具${tool_name}(${JSON.stringify(tool_args)})`
         set_event_collapse_title_text(`[${agent_name}]调用[${tool_name}]成功...`, step_id)
-        append_assistant_event_tool(title, data.tool.result, tool_name, 'antd-repair', step_id)
+        append_assistant_event_tool(title, data.tool.result, `${member_id}->${tool_name}`, step_id)
         return window.dash_clientside.no_update
     } else if (event_type === 'RunStarted') {  // 成员的开始标志
         return window.dash_clientside.no_update

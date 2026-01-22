@@ -13,6 +13,6 @@ host = '127.0.0.1'
 port = 8000
 # agno agentos启动url
 agno_agentos_url = "http://localhost:7777"
-agno_id = "deep_research_pipeline"
+agno_id = "deep-research-pipeline"
 agno_type = 'workflows'
 agno_agentos_jwt_secret = 'Yv7uMsDu6ebYt28U8qRm39s8DKoW8yoaDlKdf2ikDMjkZcts1rHLej7BfqK3sl18'

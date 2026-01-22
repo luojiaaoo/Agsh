@@ -37,7 +37,7 @@ def render_layout(user_id = 'luojiaaoo'):
                     dcc.Interval(id='interval-for-set-bearer-token', interval=1000 * 60 * 5),  # 每5分钟秒生成授权token，用于后端的鉴权
                     dcc.Store(id='store-bearer-token', storage_type='session', data=auth_util.gen_access_token(user_id=user_id,session_id=session_id)),  # 存储最新的Bearer Token
                     # sse缓存取数
-                    dcc.Interval(id='dequeue-interval', interval=100, disabled=True),  # 从队列里面取
+                    dcc.Interval(id='dequeue-interval', interval=200, disabled=True),  # 从队列里面取
                 ]
             ),
             fac.AntdFlex(

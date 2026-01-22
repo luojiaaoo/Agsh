@@ -24,7 +24,7 @@ def render(only_assistant):
                                 ),
                                 fac.AntdSpace(
                                     [
-                                        fac.AntdText('message_placeholder', style={'display': 'inline-block', 'whiteSpace': 'pre-line'}),
+                                        fac.AntdText('message_placeholder', style={'display': 'inline-block', 'whiteSpace': 'pre-wrap', 'overflowWrap': 'break-word', 'hyphens': 'auto'}),
                                         fac.AntdCopyText(text='message_placeholder'),
                                     ]
                                 ),
