@@ -38,8 +38,8 @@ Agsh 是 [agno-agi/agent-ui](https://github.com/agno-agi/agent-ui) 的轻量级�
 
 ```bash
 # 1. 克隆仓库
-git clone https://github.com/yourusername/agsh.git
-cd agsh
+git clone git@github.com:luojiaaoo/Agsh.git
+cd Agsh
 
 # 2. 安装 UV（如果尚未安装）
 pip install uv
@@ -48,7 +48,6 @@ pip install uv
 uv sync
 
 # 4. 配置 API Key
-# 编辑 agno_backend/app.py，替换第 21 行的 API Key：
 # api_key='sk-xxxx'  # 替换为你的 SiliconFlow API Key
 
 # 5. 启动后端（端口 7777）
@@ -147,3 +146,7 @@ Agsh 采用前后端分离架构：
 - [agno-agi/agent-ui](https://github.com/agno-agi/agent-ui) - 原始项目灵感来源
 - [Dash](https://dash.plotly.com/) - Python Web 应用框架
 - [Feffery Antd Components](https://github.com/CNFeffery/feffery-antd-components) - UI 组件库
+
+| | |
+| ----------------------------------------- | ------------------------------------------------- |
+| ![](screenshots/对话1.png)               | ![](screenshots/对话2.png)                 |
