@@ -16,7 +16,7 @@ from utils import auth_util
 # 获取数据库等基础配置
 @app.callback(
     [
-        Output('store-component-conf', 'data'),
+        Output('store-agent-team-workflow-conf', 'data'),
         Output('btn-get-history-session', 'disabled'),
     ],
     Input('store-bearer-token', 'id'),
@@ -29,10 +29,10 @@ def get_config(_, bearer_token):
     return response.json(), False
 
 
-# 查看agent team workflow配置
+# 查看agent team workflow基本信息
 @app.callback(
     Output('container-modal', 'children'),
-    Input('btn-get-agent-team-workflow-conf', 'nClicks'),
+    Input('btn-get-agent-team-workflow-info', 'nClicks'),
     State('store-agno-type', 'data'),  # 类型
     prevent_initial_call=True,
 )
@@ -49,21 +49,28 @@ def popup_modal(nClick, agno_type):
     )
 
 
-# 查看agent team workflow配置
+# 查看agent team workflow基本信息
 @app.callback(
-    Output('agent-team-workflow-conf-json', 'data'),
+    [
+        Output('agent-team-workflow-conf-json', 'data'),
+        Output('store-agent-team-workflow-info', 'data'),
+    ],
     Input('agent-team-workflow-conf-json', 'id'),
     [
         State('store-agno-type', 'data'),  # 类型
         State('store-agno-id', 'data'),  # agno id
         State('store-bearer-token', 'data'),
+        State('store-agent-team-workflow-info', 'data'),
     ],
 )
-def add_json(nClick, agno_type, agno_id, bearer_token):
-    headers = {'Authorization': f'Bearer {bearer_token}'}
-    response = requests.get(url=f'{conf.agno_agentos_url}/{agno_type}', headers=headers)
-    response.raise_for_status()
-    return [i for i in response.json() if i['id'] == agno_id][0]
+def add_json(nClick, agno_type, agno_id, bearer_token, info):
+    if info is None:
+        headers = {'Authorization': f'Bearer {bearer_token}'}
+        response = requests.get(url=f'{conf.agno_agentos_url}/{agno_type}', headers=headers)
+        response.raise_for_status()
+        return [[i for i in response.json() if i['id'] == agno_id][0]] * 2
+    else:
+        return info, dash.no_update
 
 
 # 按钮的状态机
@@ -249,7 +256,7 @@ def show_(nClicks):
     [
         State('store-bearer-token', 'data'),  # 授权
         State('store-user-id', 'data'),  # 用户id
-        State('store-component-conf', 'data'),  # 配置信息
+        State('store-agent-team-workflow-conf', 'data'),  # 配置信息
     ],
     running=[
         [Output('spin-table-history-session', 'spinning'), True, False],

@@ -26,7 +26,8 @@ def render_layout(user_id = 'luojiaaoo'):
                     fac.Fragment(id='container-modal'),  # 模态框容器
                     # 运行相关
                     fac.Fragment(id='container-history-session'),  # 历史会话容器
-                    dcc.Store(id='store-component-conf'),  # agents/teams/workflows的conf配置
+                    dcc.Store(id='store-agent-team-workflow-conf'),  # agents/teams/workflows的conf配置
+                    dcc.Store(id='store-agent-team-workflow-info'),  # agents/teams/workflows的基本信息
                     dcc.Store(id='store-agno-agentos-url', data=conf.agno_agentos_url),  # agentos地址
                     dcc.Store(id='store-agno-type', data=conf.agno_type),  # 类型
                     dcc.Store(id='store-agno-id', data=conf.agno_id),  # agno id

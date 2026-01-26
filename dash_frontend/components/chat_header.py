@@ -12,7 +12,7 @@ def render_chat_header_content():
             fac.AntdCol(
                 fac.AntdSpace(
                     [
-                        fac.AntdButton('查看配置', id='btn-get-agent-team-workflow-conf', **button_parameters),
+                        fac.AntdButton('基本信息', id='btn-get-agent-team-workflow-info', **button_parameters),
                         fac.AntdButton('历史会话', id='btn-get-history-session', **button_parameters, disabled=True),
                         fac.AntdButton('新建会话', id='btn-new-session', **button_parameters),
                     ],
