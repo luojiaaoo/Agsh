@@ -15,7 +15,10 @@ from utils import auth_util
 
 # 获取数据库等基础配置
 @app.callback(
-    Output('store-component-conf', 'data'),
+    [
+        Output('store-component-conf', 'data'),
+        Output('btn-get-history-session', 'disabled'),
+    ],
     Input('store-bearer-token', 'id'),
     State('store-bearer-token', 'data'),
 )
@@ -23,30 +26,44 @@ def get_config(_, bearer_token):
     headers = {'Authorization': f'Bearer {bearer_token}'}
     response = requests.get(url=f'{conf.agno_agentos_url}/config', headers=headers)
     response.raise_for_status()
-    return response.json()
+    return response.json(), False
 
 
 # 查看agent team workflow配置
 @app.callback(
     Output('container-modal', 'children'),
     Input('btn-get-agent-team-workflow-conf', 'nClicks'),
+    State('store-agno-type', 'data'),  # 类型
+    prevent_initial_call=True,
+)
+def popup_modal(nClick, agno_type):
+    return fac.AntdModal(
+        fac.AntdSpin(
+            fuc.FefferyJsonViewer(id='agent-team-workflow-conf-json', collapsed=2, iconStyle='square', indent=6),
+            text='数据加载中',
+            size='small',
+        ),
+        title=f'{agno_type}配置',
+        visible=True,
+        width='600px',
+    )
+
+
+# 查看agent team workflow配置
+@app.callback(
+    Output('agent-team-workflow-conf-json', 'data'),
+    Input('agent-team-workflow-conf-json', 'id'),
     [
         State('store-agno-type', 'data'),  # 类型
         State('store-agno-id', 'data'),  # agno id
         State('store-bearer-token', 'data'),
     ],
-    prevent_initial_call=True,
 )
-def popup_modal(nClick, agno_type, agno_id, bearer_token):
+def add_json(nClick, agno_type, agno_id, bearer_token):
     headers = {'Authorization': f'Bearer {bearer_token}'}
     response = requests.get(url=f'{conf.agno_agentos_url}/{agno_type}', headers=headers)
     response.raise_for_status()
-    return fac.AntdModal(
-        fuc.FefferyJsonViewer(data=[i for i in response.json() if i['id'] == agno_id][0], collapsed=2, iconStyle='square', indent=6),
-        title=f'{agno_type}配置',
-        visible=True,
-        width='600px',
-    )
+    return [i for i in response.json() if i['id'] == agno_id][0]
 
 
 # 按钮的状态机
