@@ -8,7 +8,7 @@ document_bp = Blueprint('document', __name__)
 
 
 @document_bp.route('/make_files_markdown', methods=['post'])
-def get_user_box():
+def markdown():
     try:
         files = request.files.getlist('files')
         if not files or all(f.filename == '' for f in files):
