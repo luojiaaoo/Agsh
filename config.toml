@@ -16,3 +16,6 @@ agno_agentos_url = "http://10.4.10.226:8102"
 agno_id = "deep-research-pipeline"
 agno_type = 'workflows'
 agno_agentos_jwt_secret = 'Yv7uMsDu6ebYt28U8qRm39s8DKoW8yoaDlKdf2ikDMjkZcts1rHLej7BfqK3sl18'
+
+[document]
+mineru_api_url = 'http://10.4.10.226:8000/file_parse'

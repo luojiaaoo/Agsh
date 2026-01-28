@@ -49,6 +49,11 @@ class Config:
     @property
     def agno_agentos_jwt_secret(self):
         return self.config['config']['agno_agentos_jwt_secret']
+    
+    # 文档解析接口
+    @property
+    def mineru_api_url(self):
+        return self.config['document']['mineru_api_url']
 
 
 conf = Config('../config.toml')

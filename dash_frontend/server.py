@@ -1,6 +1,6 @@
 import dash
 from configure import conf
-from blueprint import chat_api
+from blueprint import chat_api,document_api
 from flask import send_file, abort
 import os
 
@@ -16,6 +16,11 @@ server.register_blueprint(
     chat_api.component_bp,
     url_prefix='/component',
 )
+server.register_blueprint(
+    document_api.document_bp,
+    url_prefix='/document',
+)
+
 
 
 @server.route('/download/<session_id>/<filename>')
