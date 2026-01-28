@@ -95,7 +95,7 @@ team_deep_research = Team(
             instructions=prompt.arxiv_search_prompt + prompt.sub_agent_prompt + prompt.tool_call_prompt + prompt.miro_thinker_prompt,
         ),
     ],
-    instructions= prompt.summary_prompt + prompt.research_teams_prompt,
+    instructions= prompt.teams_leader_summary_prompt + prompt.research_teams_prompt,
 )
 
 # 网页报告生成
