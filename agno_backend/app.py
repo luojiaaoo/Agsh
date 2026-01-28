@@ -1,10 +1,11 @@
-from agno.models.siliconflow import Siliconflow
+from agno.models.vllm import VLLM
+from agno.models.openai.like import OpenAILike
 from agno.agent import Agent
 from agno.db.sqlite import SqliteDb
 from agno.os import AgentOS
+from tools import volcano_search, bing_search, web_scrape
 from middleware import JWTMiddlewareWithExclusion
 from agno.tools.arxiv import ArxivTools
-from agno.tools.duckduckgo import DuckDuckGoTools
 from fastapi.middleware.cors import CORSMiddleware
 from agno.team import Team
 import prompt
@@ -14,21 +15,31 @@ import utils
 from pathvalidate import sanitize_filename
 from fastapi.responses import JSONResponse
 from fastapi import status
+from config import settings
+
 
 # model定义
-model_deepseek_v32 = Siliconflow(
-    id='Pro/deepseek-ai/DeepSeek-V3.2',
-    api_key='sk-xxxx',
-    base_url='https://api.siliconflow.cn/v1',
+model_miro_thinker = VLLM(
+    id='MiroThinker-v1.5-30B',
+    base_url=settings.vllm_base_url,
+    api_key=settings.vllm_api_key,
 )
+
+
+model_glm_47 = OpenAILike(
+    id='GLM-4.7',
+    api_key=settings.zai_api_key,
+    base_url=settings.zai_base_url,
+)
+
 
 agent_task_planner = Agent(
     name='任务分析与规划',
     id='task-planner',
-    model=model_deepseek_v32,
+    model=model_glm_47,
     add_datetime_to_context=True,
     tool_call_limit=2,
-    tools=[DuckDuckGoTools()],
+    tools=[volcano_search],
     markdown=True,
     role='任务分析与规划专家',
     instructions=prompt.task_plan_prompt + prompt.tool_call_prompt,
@@ -37,19 +48,19 @@ agent_task_planner = Agent(
 
 # 根据子问题搜索内容
 team_deep_research = Team(
-    model=model_deepseek_v32,
+    model=model_glm_47,
     add_datetime_to_context=True,
-    tool_call_limit=10,
+    tool_call_limit=8,
     id='deep-research',
     name='Deep Research',
     members=[
         Agent(
             name='收集Web内容',
             id='web-content-gather',
-            model=model_deepseek_v32,
-            tool_call_limit=5,
+            model=model_miro_thinker,
+            tool_call_limit=8,
             add_datetime_to_context=True,
-            tools=[DuckDuckGoTools()],
+            tools=[volcano_search],
             markdown=True,
             role='网络信息收集者',
             description=[
@@ -62,8 +73,8 @@ team_deep_research = Team(
         Agent(
             name='收集Arxiv论文内容',
             id='arxiv-paper-gather',
-            model=model_deepseek_v32,
-            tool_call_limit=2,
+            model=model_miro_thinker,
+            tool_call_limit=4,
             add_datetime_to_context=True,
             tools=[ArxivTools()],
             markdown=True,
@@ -83,7 +94,7 @@ team_deep_research = Team(
 agent_html_report = Agent(
     name='html报告生成',
     id='html-report',
-    model=model_deepseek_v32,
+    model=model_glm_47,
     role='html报告生成专家',
     instructions=prompt.html_report_prompt,
 )
@@ -92,7 +103,7 @@ agent_html_report = Agent(
 agent_markdown_report = Agent(
     name='markdown报告生成',
     id='markdown-report',
-    model=model_deepseek_v32,
+    model=model_glm_47,
     role='markdown报告生成专家',
     instructions=prompt.markdown_report_prompt,
 )
@@ -101,7 +112,7 @@ agent_markdown_report = Agent(
 agent_ppt_report = Agent(
     name='ppt报告生成',
     id='ppt-report',
-    model=model_deepseek_v32,
+    model=model_glm_47,
     role='ppt报告生成专家',
     instructions=prompt.ppt_report_prompt,
 )
@@ -166,14 +177,14 @@ steps_ppt_report = Steps(
 workflow = Workflow(
     id='deep-research-pipeline',
     name='深度研究流水线',
-    db=SqliteDb(db_file='agno.db'),
+    # db=SqliteDb(db_file='agno.db'),
     steps=[
         Step(name='任务分析与规划', agent=agent_task_planner),
         Step(name='深度研究', team=team_deep_research),
         Parallel(
             steps_html_report,
             steps_markdown_report,
-            steps_ppt_report,
+            # steps_ppt_report,
         ),
         Step(name='报告链接访问地址', executor=print_url_for_report),
     ],
@@ -197,7 +208,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         'https://os.agno.com',
-        'http://127.0.0.1:8000',
+        'http://127.0.0.1:8101',
+        'http://10.4.10.226:8101',
     ],
     allow_credentials=True,
     allow_methods=['*'],
@@ -215,4 +227,4 @@ def get_steps_info():
 
 if __name__ == '__main__':
     # Default port is 7777; change with port=...
-    agent_os.serve(app='app:app', access_log=True)
+    agent_os.serve(app='app:app', access_log=True, host='0.0.0.0', port=8102)

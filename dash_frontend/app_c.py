@@ -13,20 +13,20 @@ import uuid
 from utils import auth_util
 
 
-# 获取数据库等基础配置
-@app.callback(
-    [
-        Output('store-agent-team-workflow-conf', 'data'),
-        Output('btn-get-history-session', 'disabled'),
-    ],
-    Input('store-bearer-token', 'id'),
-    State('store-bearer-token', 'data'),
-)
-def get_config(_, bearer_token):
-    headers = {'Authorization': f'Bearer {bearer_token}'}
-    response = requests.get(url=f'{conf.agno_agentos_url}/config', headers=headers)
-    response.raise_for_status()
-    return response.json(), False
+# # 获取数据库等基础配置
+# @app.callback(
+#     [
+#         Output('store-agent-team-workflow-conf', 'data'),
+#         Output('btn-get-history-session', 'disabled'),
+#     ],
+#     Input('store-bearer-token', 'id'),
+#     State('store-bearer-token', 'data'),
+# )
+# def get_config(_, bearer_token):
+#     headers = {'Authorization': f'Bearer {bearer_token}'}
+#     response = requests.get(url=f'{conf.agno_agentos_url}/config', headers=headers)
+#     response.raise_for_status()
+#     return response.json(), False
 
 
 # 查看agent team workflow基本信息
