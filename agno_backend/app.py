@@ -50,7 +50,7 @@ agent_task_planner = Agent(
     tools=[volcano_search],
     markdown=True,
     role='任务分析与规划专家',
-    instructions=prompt.task_plan_prompt + prompt.tool_call_prompt,
+    instructions=prompt.task_plan_prompt,
 )
 
 
@@ -95,7 +95,7 @@ team_deep_research = Team(
             instructions=prompt.arxiv_search_prompt + prompt.sub_agent_prompt + prompt.tool_call_prompt + prompt.miro_thinker_prompt,
         ),
     ],
-    instructions=prompt.research_teams_prompt + prompt.summary_prompt,
+    instructions= prompt.summary_prompt + prompt.research_teams_prompt,
 )
 
 # 网页报告生成
