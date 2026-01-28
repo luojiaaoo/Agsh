@@ -45,7 +45,7 @@ agent_task_planner = Agent(
     id='task-planner',
     model=model_glm_47,
     add_datetime_to_context=True,
-    tool_call_limit=2,
+    tool_call_limit=4,
     tools=[volcano_search],
     markdown=True,
     role='任务分析与规划专家',
@@ -94,7 +94,7 @@ team_deep_research = Team(
             instructions=prompt.arxiv_search_prompt + prompt.sub_agent_prompt + prompt.tool_call_prompt + prompt.miro_thinker_prompt,
         ),
     ],
-    instructions= prompt.teams_leader_summary_prompt + prompt.research_teams_prompt,
+    instructions= prompt.teams_leader_summary_prompt + prompt.research_teams_prompt + prompt.tool_call_prompt,
 )
 
 # 网页报告生成
