@@ -23,6 +23,11 @@ model_miro_thinker = VLLM(
     id='MiroThinker-v1.5-30B',
     base_url=settings.vllm_base_url,
     api_key=settings.vllm_api_key,
+    temperature=1.0,
+    top_p=0.95,
+    presence_penalty=1.05,
+    max_completion_tokens=48112,
+    max_tokens=16384,
 )
 
 
@@ -30,6 +35,9 @@ model_glm_47 = OpenAILike(
     id='GLM-4.7',
     api_key=settings.zai_api_key,
     base_url=settings.zai_base_url,
+    temperature=1.0,
+    top_p=0.95,
+    max_tokens=131072,
 )
 
 
@@ -87,7 +95,7 @@ team_deep_research = Team(
             instructions=prompt.arxiv_search_prompt + prompt.sub_agent_prompt + prompt.tool_call_prompt + prompt.miro_thinker_prompt,
         ),
     ],
-    instructions=prompt.research_teams_prompt + prompt.summary_prompt + prompt.tool_call_prompt,
+    instructions=prompt.research_teams_prompt + prompt.summary_prompt,
 )
 
 # 网页报告生成
