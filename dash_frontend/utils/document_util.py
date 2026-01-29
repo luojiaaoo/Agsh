@@ -3,6 +3,7 @@ from configure import conf
 from typing import Tuple
 import tiktoken
 from enum import StrEnum
+from .libreoffice_util import convert_office_to_pdf_batch
 
 
 class DocumentParseSplitType(StrEnum):
@@ -50,7 +51,14 @@ def make_files_markdown(file_name_bytes: Tuple[str, bytes], max_token: int = 100
         'start_page_id': '0',
         'end_page_id': '99999',
     }
-    files = [('files', i) for i in file_name_bytes]
+
+    # 串行批量转换 Office 文档为 PDF
+    try:
+        converted_files = convert_office_to_pdf_batch(file_name_bytes)
+    except Exception as e:
+        raise RuntimeError(f'文档转换失败: {str(e)}')
+
+    files = [('files', i) for i in converted_files]
     headers = {'Accept': 'application/json'}
     response = requests.request('POST', url, headers=headers, data=payload, files=files)
     response.raise_for_status()
