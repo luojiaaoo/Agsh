@@ -48,7 +48,7 @@ def render_chat_input_content():
                     ),
                     # 上传文档的按钮
                     fac.AntdUpload(
-                        apiUrl='/document/make_files_markdown',
+                        apiUrl='/document/make_file_markdown',
                         multiple=True,
                         buttonContent='文档',
                         id='btn-upload-document',

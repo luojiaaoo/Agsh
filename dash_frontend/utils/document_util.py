@@ -1,38 +1,8 @@
 from configure import conf
-from typing import Tuple, List
-import tiktoken
-from enum import StrEnum
+from typing import Tuple
 from markitdown import MarkItDown
 from openai import OpenAI
 from io import BytesIO
-
-
-class DocumentParseSplitType(StrEnum):
-    FULL = 'FULL'
-    SPLIT = 'SPLIT'
-    NULL = 'NULL'
-    OVERFLOW = 'OVERFLOW'
-
-
-def tokenizer_len(text: str) -> int:
-    tokenizer = tiktoken.get_encoding('o200k_base')
-    return len(tokenizer.encode(text, disallowed_special=()))
-
-
-def split_text_by_token(text: str, exist_token: int, max_token: int) -> str:
-    if len(text.strip()) < 20:
-        return DocumentParseSplitType.NULL, ''
-    tokenizer = tiktoken.get_encoding('o200k_base')
-    tokens = tokenizer.encode(text, disallowed_special=())
-    if exist_token + len(tokens) <= max_token:
-        return DocumentParseSplitType.FULL, text
-    else:
-        allowed_tokens = max_token - exist_token
-        truncated_tokens = tokens[:allowed_tokens]
-        if (i := tokenizer.decode(truncated_tokens)) and len(i.strip()) >= 20:
-            return DocumentParseSplitType.SPLIT, i
-        else:
-            return DocumentParseSplitType.OVERFLOW, ''
 
 
 def document_to_markdown(file_bytes: bytes, vision_enabled: bool):
@@ -45,33 +15,10 @@ def document_to_markdown(file_bytes: bytes, vision_enabled: bool):
     return result.text_content
 
 
-def make_files_markdown(files_name_bytes: List[Tuple[str, bytes]], vision_enabled: bool, max_token: int) -> dict:
-    rt_json = {'status': 'go_on_upload', 'message': None, 'results': {}}
-    null_docs = []
-    split_docs = []
-    overflow_docs = []
-    accumulated_token = 0
-    go_on_convert = True
-    for file_name, file_bytes in files_name_bytes:
-        if go_on_convert:
-            md_content = document_to_markdown(file_bytes, vision_enabled)
-            type_, text = split_text_by_token(md_content, accumulated_token, max_token)
-        else:
-            type_, text = DocumentParseSplitType.OVERFLOW, ''  # 已经溢出，停止解析
-        if type_ in (DocumentParseSplitType.OVERFLOW, DocumentParseSplitType.SPLIT):  # 溢出了，停止解析
-            go_on_convert = False
-            rt_json['status'] = 'stop_upload'
-        if text:
-            rt_json['results'][file_name] = text
-            accumulated_token += tokenizer_len(text)
-        if type_ == DocumentParseSplitType.NULL:
-            null_docs.append(file_name)
-        elif type_ == DocumentParseSplitType.SPLIT:
-            split_docs.append(file_name)
-        elif type_ == DocumentParseSplitType.OVERFLOW:
-            overflow_docs.append(file_name)
-    null_out = f'存在无法解析内容的文件：{null_docs}；' if null_docs else ''
-    split_out = f'内容过长被截断的文件：{split_docs}；' if split_docs else ''
-    overflow_out = f'内容过长无法解析的文件：{overflow_docs};' if overflow_docs else ''
-    rt_json['message'] = f'解析完成 {null_out}{split_out}{overflow_out}'
+def make_file_markdown(file_name_bytes: Tuple[str, bytes], vision_enabled: bool) -> dict:
+    rt_json = {}
+    file_name, file_bytes = file_name_bytes
+    md_content = document_to_markdown(file_bytes, vision_enabled)
+    rt_json['md_content'] = md_content
+    rt_json['message'] = f'{file_name}解析完成'
     return rt_json

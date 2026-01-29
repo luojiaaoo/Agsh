@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, abort
 import traceback
 from loguru import logger
 from components import message_box
@@ -16,3 +16,4 @@ def get_user_box():
         return jsonify({'component': json.dumps(component)}), 200
     except Exception as e:
         logger.error(f'获取用户消息盒子组件失败: {e}\n{traceback.format_exc()}')
+        abort(400, description=f'获取用户消息盒子组件失败: {e}')
