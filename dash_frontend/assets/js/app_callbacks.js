@@ -116,8 +116,8 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
             }
             return window.dash_clientside.no_update
         },
-        handleUploadDocument: (listUploadTaskRecord, input) => {
-            for (let record of listUploadTaskRecord) {
+        handleUploadDocument: (lastUploadTaskRecord, input) => {
+            for (let record of lastUploadTaskRecord) {
                 if (record.taskStatus === 'success') {
                     input += `\n\n<附件-${record.fileName}>\n${record.uploadResponse.md_content}\n</附件-${record.fileName}>`;
                 }

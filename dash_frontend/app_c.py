@@ -120,7 +120,7 @@ app.clientside_callback(
         function_name='handleUploadDocument',
     ),
     Output('input-text', 'value'),
-    Input('btn-upload-document', 'listUploadTaskRecord'),
+    Input('btn-upload-document', 'lastUploadTaskRecord'),
     State('input-text', 'value'),
     prevent_initial_call=True,
 )
