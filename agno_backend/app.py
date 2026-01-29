@@ -138,7 +138,7 @@ def save_markdown_report_file(step_input: StepInput) -> StepOutput:
     session_id = step_input.workflow_session.session_id
     session_dirpath = f'../downloads/{session_id}'
     os.makedirs(session_dirpath, exist_ok=True)
-    with open(f'{session_dirpath}/{sanitize_filename(step_input.input)}_report.md', 'w', encoding='utf-8', errors='replace') as f:
+    with open(f'{session_dirpath}/{sanitize_filename(step_input.input)[:20]}_report.md', 'w', encoding='utf-8', errors='replace') as f:
         f.write(step_input.previous_step_content)
     return 'Markdown报告保存完成'
 
@@ -147,7 +147,7 @@ def save_ppt_report_file(step_input: StepInput) -> StepOutput:
     session_id = step_input.workflow_session.session_id
     session_dirpath = f'../downloads/{session_id}'
     os.makedirs(session_dirpath, exist_ok=True)
-    with open(f'{session_dirpath}/{sanitize_filename(step_input.input)}_report.ppt.html', 'w', encoding='utf-8', errors='replace') as f:
+    with open(f'{session_dirpath}/{sanitize_filename(step_input.input)[:20]}_report.ppt.html', 'w', encoding='utf-8', errors='replace') as f:
         f.write(step_input.previous_step_content)
     return 'PPT报告保存完成'
 
