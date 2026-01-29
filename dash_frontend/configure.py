@@ -41,19 +41,27 @@ class Config:
     @property
     def agno_id(self):
         return self.config['config']['agno_id']
-    
+
     @property
     def agno_type(self):
         return self.config['config']['agno_type']
-    
+
     @property
     def agno_agentos_jwt_secret(self):
         return self.config['config']['agno_agentos_jwt_secret']
-    
+
     # 文档解析接口
     @property
-    def mineru_api_url(self):
-        return self.config['document']['mineru_api_url']
+    def document_max_token(self):
+        return self.config['document']['document_max_token']
+
+    @property
+    def vision_model_base_url(self):
+        return self.config['document']['vision_model_base_url']
+
+    @property
+    def vision_model_api_key(self):
+        return self.config['document']['vision_model_api_key']
 
 
 conf = Config('../config.toml')

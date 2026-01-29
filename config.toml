@@ -18,4 +18,6 @@ agno_type = 'workflows'
 agno_agentos_jwt_secret = 'Yv7uMsDu6ebYt28U8qRm39s8DKoW8yoaDlKdf2ikDMjkZcts1rHLej7BfqK3sl18'
 
 [document]
-mineru_api_url = 'http://10.4.10.226:8000/file_parse'
+document_max_token = 10000
+vision_model_base_url = 'http://10.199.7.162:8007/v1'
+vision_model_api_key = 'YaUaqKxXK7pSGKhlXdJC'
