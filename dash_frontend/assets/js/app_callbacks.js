@@ -119,7 +119,7 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
         handleUploadDocument: (listUploadTaskRecord, input) => {
             for (let record of listUploadTaskRecord) {
                 if (record.taskStatus === 'success') {
-                    input += `\n\n\n#${record.fileName}\n\n${record.uploadResponse.results[record.fileName]}`;
+                    input += `\n\n\n<附件-${record.fileName}>${record.uploadResponse.md_content}</附件-${record.fileName}>`;
                 }
             }
             return input

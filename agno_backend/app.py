@@ -94,7 +94,7 @@ team_deep_research = Team(
             instructions=prompt.arxiv_search_prompt + prompt.sub_agent_prompt + prompt.tool_call_prompt + prompt.miro_thinker_prompt,
         ),
     ],
-    instructions= prompt.teams_leader_summary_prompt + prompt.research_teams_prompt + prompt.tool_call_prompt,
+    instructions=prompt.teams_leader_summary_prompt + prompt.research_teams_prompt + prompt.tool_call_prompt,
 )
 
 # 网页报告生成
@@ -181,12 +181,18 @@ steps_ppt_report = Steps(
     ],
 )
 
+
+def passthrough_input(step_input: StepInput) -> StepOutput:
+    return f'{step_input.previous_step_content}\n\n\n<用户原始问题和附件>{step_input.get_input_as_string()}</用户原始问题和附件>'
+
+
 workflow = Workflow(
     id='deep-research-pipeline',
     name='深度研究流水线',
     # db=SqliteDb(db_file='agno.db'),
     steps=[
         Step(name='任务分析与规划', agent=agent_task_planner),
+        Step(name='ignore-透传原始输入给深度研究', executor=passthrough_input),
         Step(name='深度研究', team=team_deep_research),
         Parallel(
             steps_html_report,

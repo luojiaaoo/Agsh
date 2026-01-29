@@ -832,6 +832,9 @@ async function handle_workflow(data) {
     let step_name = data.step_name
     let step_id = data.step_id
     window.global_step_id = step_id
+    if (step_name?.startsWith('ignore')){ // 忽略的步骤
+        return window.dash_clientside.no_update
+    }
     if (event_type === 'StepStarted') { // 步骤开始，新建AI消息框
         let { component } = get_assistant_message_box(step_id)
         dash_clientside.set_props(
