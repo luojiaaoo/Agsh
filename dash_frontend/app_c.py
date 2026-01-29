@@ -113,6 +113,18 @@ def set_token(_, session_id, user_id):
     return auth_util.gen_access_token(user_id=user_id, session_id=session_id)
 
 
+# 上传文档，并追加到用户输入对话框
+app.clientside_callback(
+    ClientsideFunction(
+        namespace='app_clientside',
+        function_name='handleUploadDocument',
+    ),
+    Output('input-text', 'value'),
+    Input('btn-upload-document', 'listUploadTaskRecord'),
+    State('input-text', 'value'),
+    prevent_initial_call=True,
+)
+
 # 发送用户消息
 app.clientside_callback(
     ClientsideFunction(

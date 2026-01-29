@@ -39,13 +39,25 @@ def render_chat_input_content():
                         debounceWait=1000,
                         icon=fac.AntdIcon(icon='antd-export', id='btn-send-input-icon'),
                         variant='solid',
-                        size='large',
                         style={
                             'position': 'absolute',
                             'right': '20px',
                             'bottom': 10,
                         },
-                        disabled=True
+                        disabled=True,
+                    ),
+                    # 上传文档的按钮
+                    fac.AntdUpload(
+                        apiUrl='/document/make_files_markdown',
+                        multiple=True,
+                        buttonContent='文档',
+                        id='btn-upload-document',
+                        showUploadList=False,
+                        style={
+                            'position': 'absolute',
+                            'right': '20px',
+                            'bottom': 60,
+                        },
                     ),
                 ],
                 style={
