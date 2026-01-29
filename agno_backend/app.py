@@ -183,7 +183,7 @@ steps_ppt_report = Steps(
 
 
 def passthrough_input(step_input: StepInput) -> StepOutput:
-    return f'{step_input.previous_step_content}\n\n\n<用户原始问题和附件>{step_input.get_input_as_string()}</用户原始问题和附件>'
+    return f'{step_input.previous_step_content}\n\n\n<用户原始问题和附件>\n{step_input.get_input_as_string()}\n</用户原始问题和附件>'
 
 
 workflow = Workflow(
