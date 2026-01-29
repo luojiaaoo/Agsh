@@ -9,15 +9,6 @@ from typing import Tuple, List
 _libreoffice_lock = threading.Lock()
 
 
-def _check_libreoffice_available() -> bool:
-    """检查系统是否安装了 LibreOffice"""
-    libreoffice_commands = ['soffice', 'libreoffice', '/usr/bin/soffice', 'C:\\Program Files\\LibreOffice\\program\\soffice.exe']
-    for cmd in libreoffice_commands:
-        if shutil.which(cmd) or os.path.exists(cmd):
-            return True
-    return False
-
-
 def _get_libreoffice_command() -> str:
     """获取可用的 LibreOffice 命令"""
     libreoffice_commands = ['soffice', 'libreoffice', '/usr/bin/soffice', 'C:\\Program Files\\LibreOffice\\program\\soffice.exe']
@@ -87,13 +78,7 @@ def convert_office_to_pdf(file_bytes: bytes, original_filename: str) -> Tuple[by
     if file_ext not in ['.doc', '.docx', '.ppt', '.pptx']:
         return file_bytes, original_filename
     # 检查 LibreOffice 是否可用
-    if not _check_libreoffice_available():
-        raise RuntimeError(
-            '未安装 LibreOffice。请安装后再使用：\n'
-            'Windows: https://www.libreoffice.org/download/download/\n'
-            'Linux: sudo apt install libreoffice\n'
-            'macOS: brew install --cask libreoffice'
-        )
+    _get_libreoffice_command()
     with tempfile.TemporaryDirectory() as temp_dir:
         temp_input_path = os.path.join(temp_dir, f'input{file_ext}')
         with open(temp_input_path, 'wb') as f:
