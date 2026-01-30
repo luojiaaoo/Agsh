@@ -6,6 +6,7 @@ from urllib.parse import quote
 import dash
 import feffery_antd_components as fac
 import feffery_utils_components as fuc
+import feffery_markdown_components as fmc
 from feffery_dash_utils.style_utils import style
 from dash import dcc
 import requests
@@ -38,11 +39,17 @@ from utils import auth_util
 )
 def popup_modal(nClick, agno_type):
     return fac.AntdModal(
-        fac.AntdSpin(
-            fuc.FefferyJsonViewer(id='agent-team-workflow-conf-json', collapsed=2, iconStyle='square', indent=6),
-            text='数据加载中',
-            size='small',
-        ),
+        [
+            fmc.FefferyMarkdown(
+                markdownStr=conf.app_introduction,
+                style=style(background='transparent'),
+            ),
+            fac.AntdSpin(
+                fuc.FefferyJsonViewer(id='agent-team-workflow-conf-json', collapsed=2, iconStyle='square', indent=6),
+                text='数据加载中',
+                size='small',
+            ),
+        ],
         title=f'{agno_type}配置',
         visible=True,
         width='600px',

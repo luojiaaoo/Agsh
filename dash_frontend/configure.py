@@ -23,6 +23,10 @@ class Config:
     def app_title(self):
         return self.config['config']['app_title']
 
+    @property
+    def app_introduction(self):
+        return self.config['config']['app_introduction']
+
     ##### 日志配置
     @property
     def log_filepath(self):
@@ -49,7 +53,7 @@ class Config:
     @property
     def agno_agentos_jwt_secret(self):
         return self.config['config']['agno_agentos_jwt_secret']
-    
+
     @property
     def max_input_length(self):
         return self.config['config']['max_input_length']
