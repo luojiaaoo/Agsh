@@ -49,12 +49,12 @@ class Config:
     @property
     def agno_agentos_jwt_secret(self):
         return self.config['config']['agno_agentos_jwt_secret']
+    
+    @property
+    def max_input_length(self):
+        return self.config['config']['max_input_length']
 
     # 文档解析接口
-    @property
-    def document_max_token(self):
-        return self.config['document']['document_max_token']
-
     @property
     def vision_model_base_url(self):
         return self.config['document']['vision_model_base_url']

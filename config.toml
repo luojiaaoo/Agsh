@@ -11,6 +11,8 @@ log_level = "DEBUG"
 host = '0.0.0.0'
 # 服务启动端口
 port = 8101
+# 用户最大输入
+max_input_length = 16384
 # agno agentos启动url
 agno_agentos_url = "http://10.4.10.226:8102"
 agno_id = "deep-research-pipeline"

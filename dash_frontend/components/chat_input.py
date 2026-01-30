@@ -3,6 +3,7 @@ import feffery_utils_components as fuc
 from feffery_dash_utils.style_utils import style
 from dash import dcc
 from utils.enum_domain import BtnSendInputStatus
+from configure import conf
 
 
 def render_chat_input_content():
@@ -31,7 +32,7 @@ def render_chat_input_content():
                         ),
                         autoComplete='off',
                         value='',
-                        maxLength=16384,
+                        maxLength=conf.max_input_length,
                         showCount=True,
                     ),
                     # 对话发送按钮
