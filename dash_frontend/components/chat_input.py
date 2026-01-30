@@ -31,6 +31,8 @@ def render_chat_input_content():
                         ),
                         autoComplete='off',
                         value='',
+                        maxLength=16384,
+                        showCount=True,
                     ),
                     # 对话发送按钮
                     fac.AntdButton(
@@ -43,6 +45,7 @@ def render_chat_input_content():
                             'position': 'absolute',
                             'right': '20px',
                             'bottom': 10,
+                            'zIndex': 999999999999,
                         },
                         disabled=True,
                     ),
@@ -57,6 +60,7 @@ def render_chat_input_content():
                             'position': 'absolute',
                             'right': '20px',
                             'bottom': 60,
+                            'zIndex': 999999999999,
                         },
                     ),
                 ],
