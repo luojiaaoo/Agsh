@@ -116,13 +116,13 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
             }
             return window.dash_clientside.no_update
         },
-        handleUploadDocument: (lastUploadTaskRecord, input) => {
+        handleUploadDocument: (lastUploadTaskRecord, input, maxLength) => {
             for (let record of lastUploadTaskRecord) {
                 if (record.taskStatus === 'success') {
                     input += `\n\n<附件-${record.fileName}>\n${record.uploadResponse.md_content}\n</附件-${record.fileName}>`;
                 }
             }
-            return input
+            return input.slice(0, maxLength)
         }
     }
 });

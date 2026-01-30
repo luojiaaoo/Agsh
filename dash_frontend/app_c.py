@@ -121,7 +121,10 @@ app.clientside_callback(
     ),
     Output('input-text', 'value'),
     Input('btn-upload-document', 'lastUploadTaskRecord'),
-    State('input-text', 'value'),
+    [
+        State('input-text', 'value'),
+        State('input-text', 'maxLength'),
+    ],
     prevent_initial_call=True,
 )
 
