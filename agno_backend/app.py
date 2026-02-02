@@ -26,17 +26,18 @@ model_miro_thinker = VLLM(
     temperature=1.0,
     top_p=0.95,
     presence_penalty=1.05,
-    max_completion_tokens=16384,
+    max_completion_tokens=8192,
 )
 
 
 model_glm_47 = OpenAILike(
-    id='GLM-4.7',
+    id='qwen-plus',
     api_key=settings.zai_api_key,
     base_url=settings.zai_base_url,
     temperature=1.0,
     top_p=0.95,
-    max_completion_tokens=131072,
+    max_completion_tokens=32768,
+    extra_body={"enable_thinking": True},
 )
 
 
